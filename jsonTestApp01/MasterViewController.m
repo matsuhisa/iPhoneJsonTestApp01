@@ -1,21 +1,20 @@
-//
 //  MasterViewController.m
 //  jsonTestApp01
-//
-//  Created by 松久浩伸 on 2014/07/14.
-//  Copyright (c) 2014年 ___FULLUSERNAME___. All rights reserved.
-//
 
 #import "MasterViewController.h"
-
 #import "DetailViewController.h"
 
-@interface MasterViewController () {
-    NSMutableArray *_objects;
-}
+@interface MasterViewController ()
+- (void)initializePhotos;
 @end
 
 @implementation MasterViewController
+
+- (void)initializePhotos
+{
+    NSMutableArray *tempPhotos = [[NSMutableArray alloc] init];
+    self.photos = tempPhotos;
+}
 
 - (void)awakeFromNib
 {
@@ -25,30 +24,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
+    [self fetchDataFromUrl:@"http://localhost:3000/photos.json"];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-- (void)insertNewObject:(id)sender
-{
-    if (!_objects) {
-        _objects = [[NSMutableArray alloc] init];
-    }
-    [_objects insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-#pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -57,56 +40,97 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _objects.count;
+    return [self.photos count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
-    NSDate *object = _objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    NSDictionary *photo = _photos[indexPath.row];
+    cell.textLabel.text = photo[@"title"];
+    cell.detailTextLabel.text = [photo[@"id"] stringValue];
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+// データー読み込み
+// - URL を指定して読み込み
+- (void)fetchDataFromUrl:(NSString *)post_url
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_objects removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    NSLog(@"----------");
+    NSLog(@"%@", post_url);
+    NSURL *url = [NSURL URLWithString:post_url];
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *task =
+    [session dataTaskWithURL:url
+           completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+     {
+         if (error)
+         {
+             // 通信が異常終了したときの処理
+             return;
+         }
+         
+         // 通信が正に常終了したときの処理
+         NSError *jsonError = nil;
+         NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+         
+         // JSONエラーチェック
+         if (jsonError != nil) return;
+         
+         // 検索結果をディクショナリにセット
+         if([self.photos count] > 0)
+         {
+             self.photos = [NSMutableArray arrayWithArray:self.photos];
+             [self.photos addObjectsFromArray:jsonDictionary[@"data"]];
+         }else{
+             self.photos = jsonDictionary[@"data"];
+         }
+         
+         // 次のページの情報があるか
+         self.next_url = jsonDictionary[@"pagination"][@"next_url"];
+
+         // TableView をリロード
+         // メインスレッドでやらないと最悪クラッシュする
+         [self performSelectorOnMainThread:@selector(reloadTableView) withObject:nil waitUntilDone:YES];
+         //[session invalidateAndCancel];
+     }];
+    
+    // 通信開始
+    [task resume];
+    NSLog(@"----------");
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    //一番下までスクロールしたかどうか
+    if(self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height))
+    {
+        //まだ表示するコンテンツが存在するか判定し存在するなら○件分を取得して表示更新する
+        if(self.next_url.length > 0)
+        {
+            [self fetchDataFromUrl:self.next_url];
+        }else{
+            
+        }
     }
 }
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+// テーブルビューを再描画する
+- (void)reloadTableView
 {
+    [self.tableView reloadData];
 }
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = _objects[indexPath.row];
-        [[segue destinationViewController] setDetailItem:object];
     }
 }
 
