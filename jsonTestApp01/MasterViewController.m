@@ -3,6 +3,7 @@
 
 #import "MasterViewController.h"
 #import "DetailViewController.h"
+#import "CCell.h"
 
 @interface MasterViewController ()
 - (void)initializePhotos;
@@ -14,11 +15,16 @@
 {
     NSMutableArray *tempPhotos = [[NSMutableArray alloc] init];
     self.photos = tempPhotos;
+    
+    
 }
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+[UINavigationBar appearance].barTintColor = [UIColor colorWithRed:0.000 green:0.549 blue:0.890 alpha:1.000];
+[UINavigationBar appearance].tintColor = [UIColor whiteColor];
+[UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 }
 
 - (void)viewDidLoad
@@ -45,11 +51,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    CCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     NSDictionary *photo = _photos[indexPath.row];
-    cell.textLabel.text = photo[@"title"];
-    cell.detailTextLabel.text = [photo[@"id"] stringValue];
+    
+    cell.titleLabel.text      = photo[@"title"];
+    cell.messageTextView.text = photo[@"message"];
+    cell.updatedAtLabel.text  = photo[@"updated_at"]; // 日付は文字列としてくる？
+    
+    cell.imageUrl = photo[@"image_url"];
+    
+    cell.idLabel.text         = [photo[@"id"] stringValue];
+    
     return cell;
 }
 

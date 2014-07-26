@@ -22,6 +22,9 @@
 		B917388019734E3900E3DD6B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B917385F19734E3900E3DD6B /* UIKit.framework */; };
 		B917388819734E3900E3DD6B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B917388619734E3900E3DD6B /* InfoPlist.strings */; };
 		B917388A19734E3900E3DD6B /* jsonTestApp01Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B917388919734E3900E3DD6B /* jsonTestApp01Tests.m */; };
+		B948B03819772C7B00D674B9 /* CCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B948B03719772C7B00D674B9 /* CCell.m */; };
+		B948B03A197896F800D674B9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B948B039197896F800D674B9 /* QuartzCore.framework */; };
+		B9EA9CF9198084EC006E028F /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = B9EA9CF8198084EC006E028F /* FontAwesome.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +59,10 @@
 		B917388519734E3900E3DD6B /* jsonTestApp01Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "jsonTestApp01Tests-Info.plist"; sourceTree = "<group>"; };
 		B917388719734E3900E3DD6B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B917388919734E3900E3DD6B /* jsonTestApp01Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jsonTestApp01Tests.m; sourceTree = "<group>"; };
+		B948B03619772C7B00D674B9 /* CCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCell.h; sourceTree = "<group>"; };
+		B948B03719772C7B00D674B9 /* CCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCell.m; sourceTree = "<group>"; };
+		B948B039197896F800D674B9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B9EA9CF8198084EC006E028F /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B948B03A197896F800D674B9 /* QuartzCore.framework in Frameworks */,
 				B917385E19734E3900E3DD6B /* CoreGraphics.framework in Frameworks */,
 				B917386019734E3900E3DD6B /* UIKit.framework in Frameworks */,
 				B917385C19734E3900E3DD6B /* Foundation.framework in Frameworks */,
@@ -104,6 +112,7 @@
 		B917385A19734E3900E3DD6B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B948B039197896F800D674B9 /* QuartzCore.framework */,
 				B917385B19734E3900E3DD6B /* Foundation.framework */,
 				B917385D19734E3900E3DD6B /* CoreGraphics.framework */,
 				B917385F19734E3900E3DD6B /* UIKit.framework */,
@@ -118,6 +127,8 @@
 				B917386A19734E3900E3DD6B /* AppDelegate.h */,
 				B917386B19734E3900E3DD6B /* AppDelegate.m */,
 				B917386D19734E3900E3DD6B /* Main.storyboard */,
+				B948B03619772C7B00D674B9 /* CCell.h */,
+				B948B03719772C7B00D674B9 /* CCell.m */,
 				B917387019734E3900E3DD6B /* MasterViewController.h */,
 				B917387119734E3900E3DD6B /* MasterViewController.m */,
 				B917387319734E3900E3DD6B /* DetailViewController.h */,
@@ -131,6 +142,7 @@
 		B917386219734E3900E3DD6B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B9EA9CF8198084EC006E028F /* FontAwesome.otf */,
 				B917386319734E3900E3DD6B /* jsonTestApp01-Info.plist */,
 				B917386419734E3900E3DD6B /* InfoPlist.strings */,
 				B917386719734E3900E3DD6B /* main.m */,
@@ -235,6 +247,7 @@
 			files = (
 				B917387719734E3900E3DD6B /* Images.xcassets in Resources */,
 				B917386619734E3900E3DD6B /* InfoPlist.strings in Resources */,
+				B9EA9CF9198084EC006E028F /* FontAwesome.otf in Resources */,
 				B917386F19734E3900E3DD6B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,6 +267,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B948B03819772C7B00D674B9 /* CCell.m in Sources */,
 				B917386C19734E3900E3DD6B /* AppDelegate.m in Sources */,
 				B917387219734E3900E3DD6B /* MasterViewController.m in Sources */,
 				B917386819734E3900E3DD6B /* main.m in Sources */,
@@ -462,6 +476,7 @@
 				B917388F19734E3900E3DD6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B917389019734E3900E3DD6B /* Build configuration list for PBXNativeTarget "jsonTestApp01Tests" */ = {
 			isa = XCConfigurationList;
@@ -470,6 +485,7 @@
 				B917389219734E3900E3DD6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
